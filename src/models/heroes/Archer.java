@@ -6,6 +6,7 @@ import models.attacks.AttackBehavior;
 public class Archer extends Hero {
 
     public Archer() {
-        super("ARCHER", 15, 1, new ArcherAttack());
+        super("ARCHER", 80, 2);
     }
+
 }

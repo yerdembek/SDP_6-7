@@ -2,7 +2,8 @@ package models.attacks;
 
 import models.heroes.Hero;
 
-public class ArcherAttack implements AttackBehavior {
+public class WarriorAttack implements AttackBehavior{
+
     @Override
     public void attack(Hero attacker, Hero target, Runnable onSendRequest) {
         // Здесь можно добавить спецэффекты (звук, визуал)
@@ -12,16 +13,16 @@ public class ArcherAttack implements AttackBehavior {
 
     @Override
     public int getRange() {
-        return 6;
+        return 2;
     }
 
     @Override
     public int getDamageMultiplier() {
-        return 1;
+        return 4;
     }
 
     @Override
     public String toString() {
-        return "Bow";
+        return "Staff";
     }
 }

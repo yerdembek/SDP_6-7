@@ -4,6 +4,6 @@ import models.attacks.ArcherAttack;
 
 public class Goblin extends Hero {
     public Goblin() {
-        super("GOBLIN",20, 10, new ArcherAttack());
+        super("GOBLIN",20, 10);
     }
 }

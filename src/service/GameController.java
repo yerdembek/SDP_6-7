@@ -1,5 +1,6 @@
 package service;
 
+import models.attacks.ArcherAttack;
 import models.heroes.Hero;
 
 public class GameController {
@@ -32,9 +33,13 @@ public class GameController {
         });
     }
 
-    public void attack() {
+    public void onCreate(){
+        
+    }
+
+    public void onAttack() {
         if (gameOver || hero.getHealth() <= 0) return;
-        client.sendAttack(hero.getName(), hero.getDamage(), "Лук", hero.getHealth());
+        client.sendAttack(hero.getName(), hero.getDamage(), hero.getAttackBehavior(), hero.getHealth());
     }
 
     public Hero getHero() { return hero; }

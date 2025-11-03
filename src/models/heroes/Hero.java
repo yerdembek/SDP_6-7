@@ -16,18 +16,21 @@ public abstract class Hero {
     private long lastAttackRequestTime = 0;
     private long attackCooldownMs = 1000;
 
-    public Hero(String name, int maxHealth, int maxDamage, AttackBehavior attackBehavior) {
+    public void setAttackBehavior(AttackBehavior behavior) {
+        this.attackBehavior = behavior;
+    }
+
+    public Hero(String name, int maxHealth, int maxDamage) {
         this.id = nextId++;
         this.maxHealth = maxHealth;
         this.maxDamage = maxDamage;
         health = maxHealth;
         damage = maxDamage;
-        setAttackBehavior(attackBehavior);
         this.name = name;
     }
 
-    public void setAttackBehavior(AttackBehavior behavior) {
-        this.attackBehavior = behavior;
+    public String getAttackBehavior(){
+        return attackBehavior.toString();
     }
 
     public boolean attack(Hero target, Runnable onSendRequest) {
@@ -35,6 +38,7 @@ public abstract class Hero {
 
         long now = System.currentTimeMillis();
         if (now - lastAttackRequestTime < attackCooldownMs) {
+            //I am in cooldown
             return false;
         }
 
@@ -53,7 +57,6 @@ public abstract class Hero {
 
     public String getName() { return name; }
     public int getDamage() { return damage; }
-    public int getId() { return id; }
     public int getHealth() { return health; }
 
 }

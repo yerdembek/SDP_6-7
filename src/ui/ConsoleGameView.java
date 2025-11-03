@@ -18,7 +18,7 @@ public class ConsoleGameView {
             System.out.println("HP: " + controller.getHero().getHealth() + " | Введите 'a' для атаки, 'q' для выхода");
             String cmd = scanner.nextLine().trim().toLowerCase();
             if ("a".equals(cmd)) {
-                controller.attack();
+                controller.onAttack();
             } else if ("q".equals(cmd)) {
                 break;
             }

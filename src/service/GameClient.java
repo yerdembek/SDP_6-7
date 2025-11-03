@@ -52,7 +52,7 @@ public class GameClient {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(gson.toJson(req));
         } catch (IOException e) {
-            // обработка ошибки
+            System.out.println(e.getMessage());
         }
     }
 
