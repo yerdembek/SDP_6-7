@@ -1,8 +1,11 @@
 package service;
 
+import com.bya.model.AttackConfirmationData;
 import com.bya.model.ClientRequest;
+import com.bya.model.GameOverData;
 import com.bya.model.HeroAttackData;
 import com.bya.model.ServerEvent;
+import com.bya.model.VillainAttackData;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -56,6 +59,26 @@ public class GameClient {
         }
     }
 
+    public void sendReportHealth(String name, int heroHp) {
+        if (!connected) return;
+        try {
+            HeroAttackData data = new HeroAttackData();
+            data.characterName = name;
+            data.heroHp = heroHp;
+            data.attackDamage = 0;
+            data.weaponType = null;
+
+            ClientRequest req = new ClientRequest();
+            req.action = "reportHealth";
+            req.data = data;
+
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            out.println(gson.toJson(req));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     private void startListening() {
         Thread t = new Thread(() -> {
             try (BufferedReader in = new BufferedReader(
@@ -74,19 +97,23 @@ public class GameClient {
     }
 
     private void notifyListeners(ServerEvent event) {
+        String dataAsJson = gson.toJson(event.data);
         for (GameEventListener listener : listeners) {
             switch (event.eventType) {
                 case "attackConfirmation":
-                    int vHp = ((Double) event.data.get("villainHp")).intValue();
-                    listener.onAttackConfirmation((String) event.data.get("message"), vHp);
+                    AttackConfirmationData attackConfirmData = gson.fromJson(dataAsJson, AttackConfirmationData.class);
+                    listener.onAttackConfirmation(attackConfirmData.message, attackConfirmData.villainHp);
                     break;
                 case "villainAttack":
-                    int dmg = ((Double) event.data.get("damageDealt")).intValue();
-
-                    listener.onVillainAttack(dmg, -1);
+                    VillainAttackData villainAttackData = gson.fromJson(dataAsJson, VillainAttackData.class);
+                    listener.onVillainAttack(villainAttackData.damageDealt, villainAttackData.villainHp);
                     break;
                 case "gameOver":
-                    listener.onGameOver((String) event.data.get("winner"));
+                    GameOverData gameOverData = gson.fromJson(dataAsJson, GameOverData.class);
+                    listener.onGameOver(gameOverData.winner);
+                    break;
+                case "shockwaveImpact": // <-- ДОБАВЛЕНО
+                    listener.onShockwaveImpact();
                     break;
             }
         }

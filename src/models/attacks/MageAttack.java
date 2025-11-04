@@ -16,10 +16,7 @@ public class MageAttack implements AttackBehavior{
         return 3;
     }
 
-    @Override
-    public int getDamageMultiplier() {
-        return 2;
-    }
+
 
     @Override
     public String toString() {

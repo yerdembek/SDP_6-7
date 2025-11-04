@@ -16,10 +16,6 @@ public class WarriorAttack implements AttackBehavior{
         return 2;
     }
 
-    @Override
-    public int getDamageMultiplier() {
-        return 4;
-    }
 
     @Override
     public String toString() {

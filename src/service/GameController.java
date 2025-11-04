@@ -1,12 +1,17 @@
 package service;
 
-import models.attacks.ArcherAttack;
 import models.heroes.Hero;
+import ui.GameViewListener;
 
 public class GameController {
     private Hero hero;
     private GameClient client;
     private boolean gameOver = false;
+    private GameViewListener viewListener;
+
+    public void setViewListener(GameViewListener listener) {
+        this.viewListener = listener;
+    }
 
     public GameController(Hero hero, GameClient client) {
         this.hero = hero;
@@ -14,9 +19,8 @@ public class GameController {
         client.addListener(new GameEventListener() {
             @Override
             public void onVillainAttack(int damage, int ignored) {
-                hero.takeDamage(damage);
-                if (hero.getHealth() <= 0) {
-                    System.out.println("[💀] Вы погибли!");
+                if (viewListener != null) {
+                    viewListener.onVillainAttackReceived(damage);
                 }
             }
 
@@ -30,11 +34,18 @@ public class GameController {
             public void onAttackConfirmation(String message, int villainHp) {
                 System.out.println("[✓] " + message + " Злодей HP: " + villainHp);
             }
+
+            @Override
+            public void onShockwaveImpact() {
+                if (viewListener != null) {
+                    viewListener.onShowShockwave();
+                }
+            }
         });
     }
 
-    public void onCreate(){
-        
+    public void reportCurrentHealth() {
+        client.sendReportHealth(hero.getName(), hero.getHealth());
     }
 
     public void onAttack() {

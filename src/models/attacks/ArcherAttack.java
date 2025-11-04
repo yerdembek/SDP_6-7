@@ -15,10 +15,7 @@ public class ArcherAttack implements AttackBehavior {
         return 6;
     }
 
-    @Override
-    public int getDamageMultiplier() {
-        return 1;
-    }
+
 
     @Override
     public String toString() {
